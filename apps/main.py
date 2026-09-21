@@ -42,9 +42,11 @@ def calc_metrics(original_data, changed_data, max_value: Optional[float] = None)
     # R2 - coefficient of determination
     r2 = r2_score(original_flat, changed_flat)
     rp.add_item(f"R²\n(coefficient of the determination)", rp.format_value(r2))
-    # # Mean Absolute Percentage Error
-    # mape = mean_absolute_percentage_error(original_flat, changed_flat)
-    # rp.add_item("MAPE", rp.format_value(mape))
+
+    non_zero_mask = original_flat > 0
+    # Mean Absolute Percentage Error
+    mape = mean_absolute_percentage_error(original_flat[non_zero_mask], changed_flat[non_zero_mask])
+    rp.add_item("MAPE\n(excluded zero values)", rp.format_value(mape))
 
     df = rp.get_pd_report()
 
